@@ -1,0 +1,23 @@
+#! /bin/bash
+
+# Ejecutar rcnode si no se esta ejecutando
+ps ux > activeProcesses
+
+if [ `cat activeProcesses | grep -c "icebox --Ice.Config=/opt/robocomp/etc/rcnode.conf"` -ne 1 ]; then 
+  rcnode &
+fi 
+
+# Componente JoystickPublisher
+if [ `cat activeProcesses | grep -c "JoystickPublish"` -lt 1 ]; then 
+  gnome-terminal --title="JoystickPublisher" -e "${JOYSTICKPUBLISHER}/bin/JoystickPublish ${JOYSTICKPUBLISHER}/etc/config_gazebo"   
+else 
+  # Cerrar los procesos 
+fi 
+
+# Componente GazeboBridge
+if [ `cat activeProcesses | grep -c "Gazebo2Robocomp"` -lt 1 ]; then 
+  gnome-terminal --title="GazeboBridge" -e "${GAZEBOBRIDGE}/bin/Gazebo2Robocomp ${GAZEBOBRIDGE}/etc/config"
+else 
+  # Cerrar los procesos
+fi 
+rm activeProcesses
