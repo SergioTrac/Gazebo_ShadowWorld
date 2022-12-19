@@ -1,23 +1,56 @@
 #! /bin/bash
 
-# Ejecutar rcnode si no se esta ejecutando
-ps ux > activeProcesses
+# Check if any arguments were passed to the script
+if [ $# -ne 0 ]; then
+  echo "Error. Usage: $0" 1>&2
+  exit 1 
+fi 
 
+# Create a file called "activeProcesses" containing a list of all active processes with their PID and command
+ps axo pid,command > activeProcesses
+
+# Check if rcnode is in the list of active processes
 if [ `cat activeProcesses | grep -c "icebox --Ice.Config=/opt/robocomp/etc/rcnode.conf"` -ne 1 ]; then 
   rcnode &
 fi 
 
-# Componente JoystickPublisher
-if [ `cat activeProcesses | grep -c "JoystickPublish"` -lt 1 ]; then 
-  gnome-terminal --title="JoystickPublisher" -e "${JOYSTICKPUBLISHER}/bin/JoystickPublish ${JOYSTICKPUBLISHER}/etc/config_gazebo"   
-else 
-  # Cerrar los procesos 
+# If the file "processInfo" exists, delete it
+if [ -f processInfo ]; then
+  rm processInfo
 fi 
 
-# Componente GazeboBridge
-if [ `cat activeProcesses | grep -c "Gazebo2Robocomp"` -lt 1 ]; then 
-  gnome-terminal --title="GazeboBridge" -e "${GAZEBOBRIDGE}/bin/Gazebo2Robocomp ${GAZEBOBRIDGE}/etc/config"
-else 
-  # Cerrar los procesos
+# Create a list of all active "JoystickPublish" processes and save it in the file "processInfo"
+cat activeProcesses | grep "JoystickPublish" > processInfo
+
+# If there is at least one process in the list
+if [ `wc -l < processInfo` -ge 1 ]; then 
+
+  # Kill the processes with the "kill -9" command
+  while read processPID command; do 
+    kill -9 $processPID
+  done < processInfo
+
 fi 
+
+# Open a terminal with the title "JoystickPublisher" and run the "JoystickPublish" component
+gnome-terminal --title="JoystickPublisher" -e "${JOYSTICKPUBLISHER}/bin/JoystickPublish ${JOYSTICKPUBLISHER}/etc/config_gazebo"   
+
+# Create a list of all active "Gazebo2Robocomp" processes and save it in the file "processInfo"
+cat activeProcesses | grep "Gazebo2Robocomp" > processInfo
+
+# If there is at least one process in the list
+if [ `wc -l < processInfo` -ge 1 ]; then 
+
+  # Kill the processes with the "kill -9" command
+  while read processPID command; do 
+    kill -9 $processPID
+  done < processInfo
+
+fi
+
+# Open a terminal with the title "GazeboBridge" and run the "Gazebo2Robocomp" component
+gnome-terminal --title="GazeboBridge" -e "${GAZEBOBRIDGE}/bin/Gazebo2Robocomp ${GAZEBOBRIDGE}/etc/config"
+
+# Delete the auxiliar files
+rm processInfo
 rm activeProcesses
