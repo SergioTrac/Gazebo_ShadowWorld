@@ -29,7 +29,7 @@ qdbus org.kde.yakuake /yakuake/sessions org.kde.yakuake.splitTerminalTopBottom "
 qdbus org.kde.yakuake /yakuake/sessions runCommandInTerminal 0 "export GZ_SIM_RESOURCE_PATH=./local_models/" #- Adding local model directory to the main .sdf
 qdbus org.kde.yakuake /yakuake/sessions runCommandInTerminal 0 "rcnode&"
 qdbus org.kde.yakuake /yakuake/sessions runCommandInTerminal 0 "cd ~/Repositories/Gazebo_ShadowWorld"
-qdbus org.kde.yakuake /yakuake/sessions runCommandInTerminal 0 "gz sim shadow.sdf"
+qdbus org.kde.yakuake /yakuake/sessions runCommandInTerminal 0 "gz sim shadow_basic.sdf"
 
 sleep 4
 
