@@ -30,7 +30,7 @@
             <collision name='collision'>
                 <geometry>
                     <mesh>
-                        <uri>model://Robot_Shadow/meshes/shadow_collision.dae</uri>
+                        <uri>model://Robot_Shadow/meshes/shadow_collision.stl</uri>
                     </mesh>
                 </geometry>
             </collision>
