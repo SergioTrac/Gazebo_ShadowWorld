@@ -318,6 +318,7 @@
             <pose>0.8 0 0.5 0 0 0</pose>
         </frame>
 
+        <!-- *************************** DIFFERENCIAL DRIVE ****************************** -->
         <plugin
             filename="libgz-sim-diff-drive-system.so"
             name="gz::sim::systems::DiffDrive">
@@ -327,7 +328,7 @@
             <right_joint>right_front_wheel_joint</right_joint>
             <wheel_separation>0.4</wheel_separation>
             <wheel_radius>0.07</wheel_radius>
-            <odom_publish_frequency>1</odom_publish_frequency>
+            <odom_publish_frequency>10</odom_publish_frequency>
             <topic>cmd_vel</topic>
         </plugin>
 
